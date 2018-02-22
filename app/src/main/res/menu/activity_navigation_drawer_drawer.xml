@@ -1,38 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_switch"
+            android:checkable="false"
+            android:icon="@drawable/ic_my_location"
+            android:title="My Location"
+            app:actionLayout="@layout/action_switch" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_offers"
+            android:icon="@drawable/ic_coupon"
+            android:title="Offers" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_resturants"
+            android:icon="@drawable/ic_dinner"
+            android:title="Restaurants" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_user"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_rate_review"
+            android:icon="@drawable/ic_rate_review"
+            android:title="Reviews" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Others">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="Settings" />
+                <item
+                    android:id="@+id/nav_share"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Share with Friends" />
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/ic_info"
+                    android:title="About Us" />
+            </group>
         </menu>
     </item>
-
 </menu>

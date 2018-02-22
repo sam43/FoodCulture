@@ -1,4 +1,4 @@
-package com.module.sayem.foodculture;
+package com.module.sayem.foodculture.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,10 +29,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.module.sayem.foodculture.NavigationDrawerActivity;
+import com.module.sayem.foodculture.R;
 
 import java.util.ArrayList;
 import java.util.List;
