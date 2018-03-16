@@ -35,6 +35,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     Toolbar toolbar;
     FrameLayout btn_contact_us;
     private SwitchCompat switcher;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,24 +55,41 @@ public class NavigationDrawerActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         MenuItem menuItem = menu.findItem(R.id.nav_switch);
         View actionView = MenuItemCompat.getActionView(menuItem);
-        switcher = (SwitchCompat) actionView.findViewById(R.id.switcher);
+        switcher = actionView.findViewById(R.id.switcher);
+        switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Snackbar.make(navigationView.getMenu().getItem(0).getActionView(), (switcher.isChecked()) ? "Location is ON" : "Location is OFF", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                if (switcher.isChecked()) {
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                } else {
+                    navigationView.getMenu().getItem(0).setChecked(false);
+                }
+            }
+        });
+        /*switcher.setOnCheckedChangeListener((compoundButton, b) -> Snackbar.make(navigationView.getMenu().getItem(0).getActionView(), (switcher.isChecked()) ? "Location is ON" : "Location is OFF", Snackbar.LENGTH_SHORT).setAction("Action", null).show());
+        if (switcher.isChecked()) {
+            navigationView.getMenu().getItem(0).setChecked(true);
+        } else {
+            navigationView.getMenu().getItem(0).setCheckable(false);
+        }*/
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void Initialize() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        hello = (TextView) findViewById(R.id.tv_hello);
+        toolbar = findViewById(R.id.toolbar);
+        mTitle = toolbar.findViewById(R.id.toolbar_title);
+        hello = findViewById(R.id.tv_hello);
         btn_contact_us = findViewById(R.id.btn_contact_us);
         mTitle.setText(R.string.str_home);
         //app.setTypeface(hello);
@@ -92,7 +110,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -127,45 +145,38 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(final MenuItem item) {
         // Handle navigation view item clicks here.
 
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         int id = item.getItemId();
+        if (id == R.id.nav_switch) {
+            //switcher.setChecked(!switcher.isChecked());
 
-        if (id == R.id.nav_offers) {
+            //Snackbar.make(item.getActionView(), (switcher.isChecked()) ? "is checked" : "not checked", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+            if (switcher.isChecked())
+            Toast.makeText(this, "Location Turned ON!", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, "Location is OFF!", Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.nav_offers) {
             // Handle the camera action
             hello.setText("Offers and discount\nComing Soon...");
-        } else if (id == R.id.nav_switch) {
-            //switcher.setChecked(!switcher.isChecked());
-            switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Snackbar.make(item.getActionView(), (switcher.isChecked()) ? "Location is ON" : "Location is OFF", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                }
-            });
-            //Snackbar.make(item.getActionView(), (switcher.isChecked()) ? "is checked" : "not checked", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-            //Toast.makeText(this, "Location Turned on!", Toast.LENGTH_SHORT).show();
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_resturants) {
             hello.setText("search Resturants\nComing Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_profile) {
             hello.setText("Your profile settings\nComing Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_rate_review) {
             hello.setText("Write your reviews\nComming Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_share) {
             hello.setText("Share with friends\nComing Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_settings) {
             hello.setText("Settings app page\nComing Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_about) {
             hello.setText("About us page\nComing Soon...");
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         }
 

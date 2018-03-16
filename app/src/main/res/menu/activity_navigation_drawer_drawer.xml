@@ -8,7 +8,6 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_switch"
-            android:checkable="false"
             android:icon="@drawable/ic_my_location"
             android:title="My Location"
             app:actionLayout="@layout/action_switch" />
