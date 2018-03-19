@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "1002714615682",
+    "firebase_url": "https://fcm-system-app.firebaseio.com",
+    "project_id": "fcm-system-app",
+    "storage_bucket": "fcm-system-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002714615682:android:884a98dfd8efdcc7",
+        "android_client_info": {
+          "package_name": "com.sam43.firebasenotifications"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002714615682-o5m7tfokadds5f78h3djdekk1ekcm95d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPofKIS1bmiHqQYA5NSdsTaSmYvhexi5U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002714615682:android:7bc0b35d6456fde5",
+        "android_client_info": {
+          "package_name": "com.rrmsense.locationtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002714615682-eajcca4mp6mcsd4gmu9lddfdb6905hc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rrmsense.locationtracker",
+            "certificate_hash": "8c483c2e57776d2699977fb29b1a1067bfd4439e"
+          }
+        },
+        {
+          "client_id": "1002714615682-o5m7tfokadds5f78h3djdekk1ekcm95d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPofKIS1bmiHqQYA5NSdsTaSmYvhexi5U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002714615682-o5m7tfokadds5f78h3djdekk1ekcm95d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002714615682:android:51181ddfbb0d1467",
+        "android_client_info": {
+          "package_name": "com.module.sayem.foodculture"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002714615682-v93a46q39n25629tc3v8c2908h7rpvgf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.module.sayem.foodculture",
+            "certificate_hash": "81f46ac6dca98c3677ee250fc276396e20475833"
+          }
+        },
+        {
+          "client_id": "1002714615682-o5m7tfokadds5f78h3djdekk1ekcm95d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPofKIS1bmiHqQYA5NSdsTaSmYvhexi5U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002714615682-o5m7tfokadds5f78h3djdekk1ekcm95d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
