@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.module.sayem.foodculture.NavigationDrawerActivity">
+    tools:context="com.module.sayem.foodculture.ui.activities.NavigationDrawerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,13 +16,13 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:gravity="center"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="@string/app_name"
                 android:textSize="20sp"
                 android:layout_marginEnd="15dp"
                 android:textColor="#FFF"

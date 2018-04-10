@@ -1,4 +1,4 @@
-package com.module.sayem.foodculture.ui;
+package com.module.sayem.foodculture.ui.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,6 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,9 +30,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.module.sayem.foodculture.NavigationDrawerActivity;
 import com.module.sayem.foodculture.R;
+import com.module.sayem.foodculture.storage.SessionManager;
+import com.module.sayem.foodculture.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    private static final String TAG = "Act_Login";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -66,17 +70,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private RelativeLayout mainLayout;
+    private AppCompatButton mEmailSignInButton;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mainLayout = findViewById(R.id.main_layout);
-        mEmailView = findViewById(R.id.email);
-        populateAutoComplete();
+        initializeViews();
+        //populateAutoComplete();
+        onClickListers();
+        //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
-        mPasswordView = findViewById(R.id.password);
+    }
+
+    private void onClickListers() {
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -87,19 +96,62 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-
-        AppCompatButton mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> {
             // Then just use the following:
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
             //attemptLogin();
-            startActivity(new Intent(this, NavigationDrawerActivity.class));
-            finish();
+            userLogin();
+            /*startActivity(new Intent(this, NavigationDrawerActivity.class));
+            finish();*/
         });
+    }
 
+    private void initializeViews() {
+        session = new SessionManager(this.getApplicationContext());
+        // Set up the login form.
+        mainLayout = findViewById(R.id.main_layout);
+        mEmailView = findViewById(R.id.user_name);
+        mPasswordView = findViewById(R.id.user_password);
+        mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void userLogin() {
+        // Get username, password from EditText
+        String username = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        // Check if username, password is filled
+        if (username.trim().length() > 0 && password.trim().length() > 0) {
+            // For testing puspose username, password is checked with sample data
+            // username = test
+            // password = test
+            if (username.equals("test") && password.equals("test")) {
+
+                // Creating user login session
+                // For testing i am stroing name, email as follow
+                // Use user real data
+                session.createLoginSession("sam", "z@z.com");
+
+                // Staring MainActivity
+                Intent i = new Intent(getApplicationContext(), NavigationDrawerActivity.class);
+                startActivity(i);
+                finish();
+
+            } else {
+                // username / password doesn't match
+                //alert.showAlertDialog(LoginActivity.this, "Login failed..", "Username/Password is incorrect", false);
+                Toast.makeText(LoginActivity.this, "Login failed...\nUsername/Password is incorrect", Toast.LENGTH_LONG).show();
+
+            }
+        } else {
+            // user didn't entered username or password
+            // Show alert asking him to enter the details
+            //alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
+            Toast.makeText(LoginActivity.this, "Login failed...\nPlease enter username and password", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void populateAutoComplete() {
@@ -216,32 +268,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     @Override

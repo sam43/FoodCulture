@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:theme="@style/AppTheme" tools:openDrawer="start">
 
     <include
         layout="@layout/app_bar_navigation_drawer"
@@ -39,7 +39,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorPrimary"
                     android:gravity="center_horizontal|center_vertical"
-                    android:text="Contact Us"
+                    android:text="@string/contact_us"
                     android:textAllCaps="true"
                     android:textAlignment="gravity"
                     android:textColor="#FFFFFF"/>
