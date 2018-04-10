@@ -7,15 +7,22 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.module.sayem.foodculture.R;
+import com.module.sayem.foodculture.models.Info;
+import com.module.sayem.foodculture.ui.adapters.InfoListAdapter;
+
+import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
@@ -24,6 +31,11 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     private OnFragmentInteractionListener mListener;
     FloatingActionButton btn_add_info;
     String name, info;
+    RecyclerView rv_info_list;
+    LinearLayoutManager layoutManager;
+    RecyclerView.Adapter adapter;
+    ArrayList<String> info_data;
+    //ArrayList<Info> info_data;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -46,6 +58,22 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
 
     private void initializeViews(View view) {
         btn_add_info = view.findViewById(R.id.btn_add_info);
+        info_data = new ArrayList<>();
+        rv_info_list = view.findViewById(R.id.rv_info_list);
+        layoutManager = new LinearLayoutManager(getActivity());
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+
+        for (int i = 0; i < 20; i++) {
+            info_data.add("Sample User #" + i + "OK!");
+        }
+
+        rv_info_list.setHasFixedSize(true);
+        rv_info_list.setLayoutManager(layoutManager);
+        adapter = new InfoListAdapter(info_data);
+        rv_info_list.setAdapter(adapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,6 +116,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_input_dialog, null);
+        dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
 
         final EditText edt_name = dialogView.findViewById(R.id.edit_name);
@@ -99,7 +128,8 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
 
 
         dialogBuilder.setTitle("User Servey");
-        dialogBuilder.setMessage("Enter text below");
+        dialogBuilder.setIcon(R.drawable.ic_boy);
+        dialogBuilder.setMessage("Enter desired info here:");
         dialogBuilder.setPositiveButton("Done", (dialog, whichButton) -> {
             //do something with edt.getText().toString();
             Toasty.error(getActivity(), "Positive", Toast.LENGTH_SHORT).show();
