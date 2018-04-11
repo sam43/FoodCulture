@@ -95,7 +95,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
 
         rv_info_list.setHasFixedSize(true);
         rv_info_list.setLayoutManager(layoutManager);
-        adapter = new InfoListAdapter(users);
+        adapter = new InfoListAdapter(users, (item, position) -> Toasty.error(getActivity(), "Item Clicked..." + position, Toast.LENGTH_SHORT).show());
         rv_info_list.setAdapter(adapter);
     }
 
@@ -142,30 +142,24 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
 
-        EditText edt_name = dialogView.findViewById(R.id.edit_name);
-        EditText edt_info = dialogView.findViewById(R.id.edit_info);
-        EditText edt_email = dialogView.findViewById(R.id.edit_email);
+        final EditText edt_name = dialogView.findViewById(R.id.edit_name);
+        final EditText edt_info = dialogView.findViewById(R.id.edit_info);
+        final EditText edt_email = dialogView.findViewById(R.id.edit_email);
 
         dialogBuilder.setTitle("User Servey");
         dialogBuilder.setIcon(R.drawable.ic_boy);
         dialogBuilder.setMessage("Enter info here:");
         dialogBuilder.setPositiveButton("Done", (dialog, whichButton) -> {
-            //do something with edt.getText().toString();
-            //Toasty.error(getActivity(), "Positive", Toast.LENGTH_SHORT).show();
             f_name = edt_name.getText().toString();
-            //Log.d(TAG, "showInputDialog: " + f_name);
             l_name = edt_info.getText().toString();
             u_email = edt_email.getText().toString();
 
             Log.d(TAG, "showInputDialog: database will update" + f_name + "\n" + l_name + "\n" + u_email);
-
             user_en = new User_En(f_name, l_name, u_email);
             db.userDao().insertAll(user_en);
             //halka chorami korchi
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.detach(this).attach(this).commit();
-            //adapter.notifyDataSetChanged();
-            //Log.d(TAG, "showInputDialog: database updated" + f_name + "\n" + l_name + "\n" + u_email);
         });
         dialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
             //pass
