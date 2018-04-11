@@ -1,55 +1,69 @@
 package com.module.sayem.foodculture.ui.fragments;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.module.sayem.foodculture.R;
-import com.module.sayem.foodculture.models.Info;
+import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
+import com.module.sayem.foodculture.storage.roomDB.User_En;
 import com.module.sayem.foodculture.ui.adapters.InfoListAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
 public class OrdersFragment extends BaseFragment implements View.OnClickListener {
 
+    private static final String TAG = "FragOffer";
     private OnFragmentInteractionListener mListener;
     FloatingActionButton btn_add_info;
-    String name, info;
+    String f_name = "", l_name = "", u_email = "";
     RecyclerView rv_info_list;
     LinearLayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    ArrayList<String> info_data;
+    List<User_En> users;
+    private AppDatabase db;
+    private User_En user_en;
     //ArrayList<Info> info_data;
 
     public OrdersFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+
         initializeViews(view);
         viewOnclickHandling();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void viewOnclickHandling() {
@@ -58,21 +72,30 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
 
     private void initializeViews(View view) {
         btn_add_info = view.findViewById(R.id.btn_add_info);
-        info_data = new ArrayList<>();
+        users = new ArrayList<>();
         rv_info_list = view.findViewById(R.id.rv_info_list);
         layoutManager = new LinearLayoutManager(getActivity());
         initRecyclerView();
     }
 
     private void initRecyclerView() {
-
-        for (int i = 0; i < 20; i++) {
-            info_data.add("Sample User #" + i + "OK!");
+        db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "app-database")
+                .allowMainThreadQueries()
+                .build();
+        try {
+            if (users != null) {
+                users = db.userDao().getAllUsers();
+            } else {
+                Toasty.error(getActivity(), "data is null...", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         rv_info_list.setHasFixedSize(true);
         rv_info_list.setLayoutManager(layoutManager);
-        adapter = new InfoListAdapter(info_data);
+        adapter = new InfoListAdapter(users);
         rv_info_list.setAdapter(adapter);
     }
 
@@ -101,7 +124,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_info:
-                Toasty.error(getActivity(), "add to info list", Toast.LENGTH_SHORT).show();
+                //Toasty.error(getActivity(), "add to info list", Toast.LENGTH_SHORT).show();
                 showInputDialog();
                 break;
             /*case R.id.responseButton2:
@@ -119,24 +142,35 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
 
-        final EditText edt_name = dialogView.findViewById(R.id.edit_name);
-        final EditText edt_info = dialogView.findViewById(R.id.edit_info);
-        //final EditText edt_name = dialogView.findViewById(R.id.edit_name);
-
-        name = edt_name.getText().toString();
-        info = edt_info.getText().toString();
-
+        EditText edt_name = dialogView.findViewById(R.id.edit_name);
+        EditText edt_info = dialogView.findViewById(R.id.edit_info);
+        EditText edt_email = dialogView.findViewById(R.id.edit_email);
 
         dialogBuilder.setTitle("User Servey");
         dialogBuilder.setIcon(R.drawable.ic_boy);
-        dialogBuilder.setMessage("Enter desired info here:");
+        dialogBuilder.setMessage("Enter info here:");
         dialogBuilder.setPositiveButton("Done", (dialog, whichButton) -> {
             //do something with edt.getText().toString();
-            Toasty.error(getActivity(), "Positive", Toast.LENGTH_SHORT).show();
+            //Toasty.error(getActivity(), "Positive", Toast.LENGTH_SHORT).show();
+            f_name = edt_name.getText().toString();
+            //Log.d(TAG, "showInputDialog: " + f_name);
+            l_name = edt_info.getText().toString();
+            u_email = edt_email.getText().toString();
+
+            Log.d(TAG, "showInputDialog: database will update" + f_name + "\n" + l_name + "\n" + u_email);
+
+            user_en = new User_En(f_name, l_name, u_email);
+            db.userDao().insertAll(user_en);
+            //halka chorami korchi
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();
+            //adapter.notifyDataSetChanged();
+            //Log.d(TAG, "showInputDialog: database updated" + f_name + "\n" + l_name + "\n" + u_email);
         });
         dialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
             //pass
             Toasty.error(getActivity(), "Negative", Toast.LENGTH_SHORT).show();
+            db.userDao().deleteAll();
         });
         AlertDialog b = dialogBuilder.create();
         b.show();

@@ -7,14 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.module.sayem.foodculture.R;
+import com.module.sayem.foodculture.storage.roomDB.User_En;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoViewHolder> {
 
-    private ArrayList<String> info_data;
+    private List<User_En> info_data;
 
-    public InfoListAdapter(ArrayList<String> info) {
+    public InfoListAdapter(List<User_En> info) {
         this.info_data = info;
     }
 
@@ -26,7 +27,9 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
 
     @Override
     public void onBindViewHolder(InfoListAdapter.InfoViewHolder holder, int position) {
-        holder.tv_demo.setText(info_data.get(position));
+        holder.tv_firstname.setText(info_data.get(position).getFirstName());
+        holder.tv_lastname.setText(info_data.get(position).getLastName());
+        holder.tv_email.setText(info_data.get(position).getU_email());
     }
 
     @Override
@@ -36,10 +39,12 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
 
     public class InfoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_demo;
+        private TextView tv_firstname, tv_lastname, tv_email;
         public InfoViewHolder(View itemView) {
             super(itemView);
-            tv_demo = itemView.findViewById(R.id.tv_demo);
+            tv_firstname = itemView.findViewById(R.id.tv_demo);
+            tv_lastname = itemView.findViewById(R.id.tv_demo1);
+            tv_email = itemView.findViewById(R.id.tv_demo2);
         }
     }
 }

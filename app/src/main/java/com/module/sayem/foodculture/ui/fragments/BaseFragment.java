@@ -1,20 +1,15 @@
 package com.module.sayem.foodculture.ui.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.arch.persistence.room.Room;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.module.sayem.foodculture.R;
+import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +46,13 @@ public abstract class BaseFragment extends Fragment {
         if(mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
         }
+    }
+
+    protected void AppDB() {
+        AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "app-database")
+                .allowMainThreadQueries()
+                .build();
     }
 
     public void showProgress(String text) {

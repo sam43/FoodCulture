@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Food BuZZ</string>
+    <string name="app_name">Food BuZz</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -36,6 +36,7 @@
     <string name="str_review">Reviews</string>
     <string name="str_profile">Profile</string>
     <string name="str_full_name">Full Name</string>
-    <string name="str_your_info">Your info</string>
+    <string name="str_your_info">info</string>
+    <string name="str_user_email">Email Address</string>
     <string name="str_demo">demo1</string>
 </resources>
