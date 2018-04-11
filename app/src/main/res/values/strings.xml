@@ -39,4 +39,5 @@
     <string name="str_your_info">info</string>
     <string name="str_user_email">Email Address</string>
     <string name="str_demo">demo1</string>
+    <string name="undo">Undo</string>
 </resources>

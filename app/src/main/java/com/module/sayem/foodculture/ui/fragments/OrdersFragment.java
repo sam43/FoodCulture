@@ -21,6 +21,7 @@ import com.module.sayem.foodculture.R;
 import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
 import com.module.sayem.foodculture.storage.roomDB.User_En;
 import com.module.sayem.foodculture.ui.adapters.InfoListAdapter;
+import com.module.sayem.foodculture.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     List<User_En> users;
     private AppDatabase db;
     private User_En user_en;
+    Utility utility;
     //ArrayList<Info> info_data;
 
     public OrdersFragment() {
@@ -55,7 +57,6 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
-
         initializeViews(view);
         viewOnclickHandling();
         return view;
@@ -64,6 +65,8 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        utility = new Utility();
+        initRecyclerView();
     }
 
     private void viewOnclickHandling() {
@@ -75,7 +78,6 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         users = new ArrayList<>();
         rv_info_list = view.findViewById(R.id.rv_info_list);
         layoutManager = new LinearLayoutManager(getActivity());
-        initRecyclerView();
     }
 
     private void initRecyclerView() {
@@ -97,6 +99,9 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         rv_info_list.setLayoutManager(layoutManager);
         adapter = new InfoListAdapter(users, (item, position) -> Toasty.error(getActivity(), "Item Clicked..." + position, Toast.LENGTH_SHORT).show());
         rv_info_list.setAdapter(adapter);
+        //initializeSwipeBehaviour(rv_info_list);
+        utility.setUpItemTouchHelper(getActivity(), rv_info_list);
+        utility.setUpAnimationDecoratorHelper(rv_info_list);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

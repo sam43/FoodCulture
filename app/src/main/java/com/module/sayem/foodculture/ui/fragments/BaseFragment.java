@@ -40,6 +40,7 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated: ");
 
+
     }
 
     protected void dismissProgress() {
