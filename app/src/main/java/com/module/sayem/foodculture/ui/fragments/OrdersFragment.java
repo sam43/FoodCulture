@@ -1,6 +1,6 @@
 package com.module.sayem.foodculture.ui.fragments;
 
-import android.arch.persistence.room.Room;
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.module.sayem.foodculture.R;
-import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
 import com.module.sayem.foodculture.storage.roomDB.User_En;
 import com.module.sayem.foodculture.ui.adapters.InfoListAdapter;
 import com.module.sayem.foodculture.utils.Utility;
@@ -38,7 +37,6 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     LinearLayoutManager layoutManager;
     RecyclerView.Adapter adapter;
     List<User_En> users;
-    private AppDatabase db;
     private User_En user_en;
     Utility utility;
     //ArrayList<Info> info_data;
@@ -81,13 +79,9 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initRecyclerView() {
-        db = Room.databaseBuilder(getActivity(),
-                AppDatabase.class, "app-database")
-                .allowMainThreadQueries()
-                .build();
         try {
             if (users != null) {
-                users = db.userDao().getAllUsers();
+                users = AppDB().userDao().getAllUsers();
             } else {
                 Toasty.error(getActivity(), "data is null...", Toast.LENGTH_SHORT).show();
             }
@@ -99,7 +93,6 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         rv_info_list.setLayoutManager(layoutManager);
         adapter = new InfoListAdapter(users, (item, position) -> Toasty.error(getActivity(), "Item Clicked..." + position, Toast.LENGTH_SHORT).show());
         rv_info_list.setAdapter(adapter);
-        //initializeSwipeBehaviour(rv_info_list);
         utility.setUpItemTouchHelper(getActivity(), rv_info_list);
         utility.setUpAnimationDecoratorHelper(rv_info_list);
     }
@@ -161,7 +154,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
 
             Log.d(TAG, "showInputDialog: database will update" + f_name + "\n" + l_name + "\n" + u_email);
             user_en = new User_En(f_name, l_name, u_email);
-            db.userDao().insertAll(user_en);
+            AppDB().userDao().insertAll(user_en);
             //halka chorami korchi
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.detach(this).attach(this).commit();
@@ -169,7 +162,7 @@ public class OrdersFragment extends BaseFragment implements View.OnClickListener
         dialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
             //pass
             Toasty.error(getActivity(), "Negative", Toast.LENGTH_SHORT).show();
-            db.userDao().deleteAll();
+            AppDB().userDao().deleteAll();
         });
         AlertDialog b = dialogBuilder.create();
         b.show();

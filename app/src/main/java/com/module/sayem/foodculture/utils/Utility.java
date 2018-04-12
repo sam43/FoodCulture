@@ -1,5 +1,6 @@
 package com.module.sayem.foodculture.utils;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,19 +11,24 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.module.sayem.foodculture.R;
+import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
 import com.module.sayem.foodculture.ui.adapters.InfoListAdapter;
 
 import es.dmoral.toasty.Toasty;
+
 
 /**
  * Created by A.S.M Sayem on 2/20/2018.
  */
 
 public class Utility {
+
+    public boolean swipe_right2Left = false;
 
     public static void FontViewBold(Context cxt, TextView textView){
         Typeface typeface = Typeface.createFromAsset(cxt.getAssets(), "fonts/Ubuntu-Bold.ttf");
@@ -48,9 +54,16 @@ public class Utility {
         return (Integer.parseInt( hex.substring( 0,2 ), 16) << 24) + Integer.parseInt( hex.substring( 2 ), 16);
     }
 
+    public AppDatabase AppDB(Context cxt) {
+        return Room.databaseBuilder(cxt,
+                AppDatabase.class, "app-database")
+                .allowMainThreadQueries()
+                .build();
+    }
+
     public void setUpItemTouchHelper(Context context, RecyclerView mRecyclerView) {
 
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
 
             // we want to cache these and not allocate anything repeatedly in the onChildDraw method
             Drawable background;
@@ -86,11 +99,19 @@ public class Utility {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int swipedPosition = viewHolder.getAdapterPosition();
                 InfoListAdapter adapter = (InfoListAdapter) mRecyclerView.getAdapter();
-                boolean undoOn = adapter.isUndoOn();
-                if (undoOn) {
-                    adapter.pendingRemoval(swipedPosition);
-                } else {
-                    adapter.remove(swipedPosition);
+
+                if (swipeDir == ItemTouchHelper.LEFT) {
+                    swipe_right2Left = true;
+                    Log.d("swiped", "onSwipedL: " + swipeDir);
+                    boolean undoOn = adapter.isUndoOn();
+                    if (undoOn) {
+                        adapter.pendingRemoval(swipedPosition);
+                    } else {
+                        adapter.remove(swipedPosition);
+                    }
+                } else if (swipeDir == ItemTouchHelper.RIGHT) {
+                    Log.d("swiped", "onSwipedR: " + swipeDir);
+                    adapter.shortListed(swipedPosition);
                 }
             }
 
@@ -145,7 +166,7 @@ public class Utility {
             boolean initiated;
 
             private void init() {
-                background = new ColorDrawable(Color.RED);
+                background = new ColorDrawable(Color.WHITE);
                 initiated = true;
             }
 
@@ -207,8 +228,8 @@ public class Utility {
                         bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
                     }
 
-                    background.setBounds(left, top, right, bottom);
-                    background.draw(c);
+                    //background.setBounds(left, top, right, bottom);
+                    //background.draw(c);
 
                 }
                 super.onDraw(c, parent, state);

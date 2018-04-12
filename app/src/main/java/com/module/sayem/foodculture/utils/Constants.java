@@ -2,6 +2,7 @@ package com.module.sayem.foodculture.utils;
 
 public interface Constants {
 
+
     class FRAGMENT {
         public static final String HOME = "HomeFragment";
         public static final String ORDER = "OrdersFragment";

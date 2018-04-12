@@ -33,7 +33,6 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected ProgressDialog mProgressDialog;
-    protected int mRequestingFor;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -49,8 +48,8 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected void AppDB() {
-        AppDatabase db = Room.databaseBuilder(getActivity(),
+    protected AppDatabase AppDB() {
+        return Room.databaseBuilder(getActivity(),
                 AppDatabase.class, "app-database")
                 .allowMainThreadQueries()
                 .build();

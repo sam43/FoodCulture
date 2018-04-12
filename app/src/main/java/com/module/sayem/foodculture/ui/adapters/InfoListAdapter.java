@@ -1,6 +1,5 @@
 package com.module.sayem.foodculture.ui.adapters;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -11,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.module.sayem.foodculture.R;
-import com.module.sayem.foodculture.storage.roomDB.AppDatabase;
 import com.module.sayem.foodculture.storage.roomDB.User_En;
+import com.module.sayem.foodculture.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
 
     private final List<User_En> info_data;
     private final OnItemClickListener listener;
+    private Utility util = new Utility();
     private static final int PENDING_REMOVAL_TIMEOUT = 3000; // 3sec
     private HashMap<User_En, Runnable> pendingRunnables = new HashMap<>();
     private Handler handler = new Handler();
@@ -52,10 +53,9 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
         final User_En item = info_data.get(position);
         if (itemsPendingRemoval.contains(item)) {
             // we need to show the "undo" state of the row
-            holder.itemView.setBackgroundColor(Color.RED);
-            //holder.cv_item.setVisibility(View.GONE);
-            //holder.tv_undo.setVisibility(View.VISIBLE);
-            //holder.tv_undo.setText(R.string.undo);
+            if (!util.swipe_right2Left) {
+                holder.itemView.setBackgroundColor(Color.RED);
+            }
             holder.tv_firstname.setVisibility(View.GONE);
             holder.tv_lastname.setVisibility(View.GONE);
             holder.tv_email.setVisibility(View.GONE);
@@ -118,13 +118,16 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
         }
         if (info_data.contains(item)) {
             info_data.remove(position);
-            AppDatabase db = Room.databaseBuilder(context,
-                    AppDatabase.class, "app-database")
-                    .allowMainThreadQueries()
-                    .build();
-            db.userDao().delete(item);
+            util.AppDB(context).userDao().delete(item);
             notifyItemRemoved(position);
         }
+    }
+
+    public void shortListed(int position) {
+        User_En item = info_data.get(position);
+        info_data.remove(item);
+        Toast.makeText(context, "Item Shortlisted", Toast.LENGTH_SHORT).show();
+        notifyItemRemoved(position);
     }
 
     class InfoViewHolder extends RecyclerView.ViewHolder {
