@@ -87,12 +87,11 @@ public class Utility {
                 int swipedPosition = viewHolder.getAdapterPosition();
                 InfoListAdapter adapter = (InfoListAdapter) mRecyclerView.getAdapter();
                 boolean undoOn = adapter.isUndoOn();
-                adapter.remove(swipedPosition);
-                /*if (undoOn) {
+                if (undoOn) {
                     adapter.pendingRemoval(swipedPosition);
                 } else {
                     adapter.remove(swipedPosition);
-                }*/
+                }
             }
 
             @Override
